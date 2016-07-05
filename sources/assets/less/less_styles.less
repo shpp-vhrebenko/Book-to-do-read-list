@@ -1,0 +1,218 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:900);
+@base_font:'Lato', sans-serif;
+
+/****************** base color **********************/
+@text_identifi: #747474;
+@color_element: #ED6426;
+@color_button: #F1A22F;
+@color_text: #8B8B8B;
+@color_tools_button: #DBA146;
+@color_error_message: #D63518;
+@color_action: #F71B1B;
+@color_author_book: #423330;
+@color_button_add: #7E3424;
+@color_star: #fe7d00;
+@color_valid: green;
+@warning-mesage: #869155;
+
+/******************** mixins ***********************/
+.input-events {
+  .input-field label {
+    color: @color_button;
+  }
+  input {
+    border-color: @color_button;
+    color: @color_text;
+  }
+  input[type]:focus {
+    border-bottom: 1px solid @color_element;
+    box-shadow: 0 1px 0 0 @color_element;
+  }
+  .ng-valid.ng-valid-required {
+    border-bottom: 1px solid @color_valid;
+    box-shadow: 0 1px 0 0 @color_valid;
+  }
+  .ng-invalid.ng-dirty {
+    border-bottom: 1px solid @color_error_message;;
+    box-shadow: 0 1px 0 0 @color_error_message;;
+  }
+}
+/*************************************************/
+html {
+    font-family: @base_font;
+}
+
+main {
+
+  nav {
+    background-color: @color_element;
+    .brand-logo {
+      padding: 0.1rem;
+      i {
+        font-size:2.5rem;
+        display: inline-block;
+      }
+      span {
+        font-size: 2rem;
+        vertical-align: top;
+      }
+    }
+    #user_identifi {
+      color: @text_identifi;
+    }
+  }
+
+  .content {
+    margin-top: 1rem;
+
+    .library {
+      .card {
+        color: @color_text;
+        .card-title {
+          color: @color_element
+        }
+        .book_author {
+          color: @color_author_book;
+        }
+        .card-action {
+          a:not(.btn) {
+            color: @color_action;
+          }
+        }
+        .done {
+          color: green;
+        }
+        .schedule {
+          color: #F71B1B;
+        }
+        .rating_stars {
+          .star {
+            color: @color_star;
+            .material-icons {
+              font-size: 1.2em;
+            }
+          }
+        }
+      }
+      .editBook {
+        button {
+          background-color: @color_button_add;
+        }
+        header {
+          text-align: center;
+        }
+        h6 {
+          text-align: center;
+        }
+        p {
+          text-align: center;
+        }
+      }
+    }
+
+    .toReadList {
+      header {
+        height: 10vh;
+        text-align: center;
+        color: @color_text
+      }
+      .toReadList_tools {
+        button {
+          background-color: @color_button;
+          text-transform: none;
+        }
+        .toDo-panel {
+          margin-top: 1rem;
+          padding: 0.5rem;
+          .add_new_todo {
+            .input-events;
+            button {
+              margin-top: 1.5rem;
+              background-color: @color_button_add;
+            }
+          }
+          .tools_panel {
+            margin-top: 1rem;
+            button {
+              margin-right: 0.5rem;
+              margin-top: 0.5rem;
+            }
+          }
+          .archive_active {
+            text-align: center;
+            color: @color_text;
+            a {
+              color: @color_action
+            }
+          }
+          .unstyled {
+            list-style-type:none;
+            .add-library {
+              z-index: 999;
+              position: absolute;
+              background-color: @color_button_add;
+            }
+            .done-true {
+              text-decoration: line-through;
+              color: grey;
+            }
+            .todo {
+              cursor: pointer;
+            }
+          }
+          .activeBookForm {
+            .input-events;
+            input {
+              margin: 0;
+            }
+            #save_book_library {
+              margin-top: 1rem;
+              background-color: @color_button_add;
+            }
+            #rating_stars {
+              border: none;
+              box-shadow: none;
+            }
+            .range-field {
+              p {
+                text-align: center;
+                color:@color_text;
+              }
+            }
+            .warning_message_wrap {
+              padding: 0.5rem;
+              text-align: center;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .login {
+    margin-top: 10vh;
+    #authForm {
+      .input-events;
+    }
+  }
+
+  .error-mesage {
+    color: @color_error_message;
+    p {
+      padding: 0.5rem;
+      text-align: center;
+    }
+  }
+  .warning-mesage {
+    color: @warning-mesage;
+  }
+  .select-wrapper {
+    color: @color_text;
+  }
+
+}
+
+
+
+

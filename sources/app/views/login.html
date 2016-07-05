@@ -1,0 +1,29 @@
+<section class="login row container">
+    <form
+    role="form"
+    name="authForm"
+    ng-submit="authForm.$valid && auth[currAction].action(auth.user)"
+    class="col s12 m4 offset-m4 card" id="authForm" novalidate>
+      <div class="row">
+        <div class="error-mesage">
+          <p ng-bind="auth.error"></p>
+        </div>
+        <div class="input-field col s12">
+          <input type="email" ng-model="auth.user.email" id="email" name="email" data-ng-change="auth.error = ''"  required  />
+          <label for="email">Email</label>
+        </div>
+        <div class="input-field col s12">
+        <input type="text" ng-model="auth.user.password" name="password" data-ng-change="auth.error = ''" required />
+        <label for="password">Password</label>
+        </div>
+        <button
+          type="submit"
+          data-ng-bind="currAction"
+          class="btn waves-effect waves-light yellow darken-3 col s10 offset-s1"
+          ng-disabled="authForm.$invalid"
+          >
+        </button>
+      </div>
+    </form>
+
+</section>

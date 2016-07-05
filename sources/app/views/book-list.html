@@ -1,0 +1,239 @@
+<section class="main container" ng-controller="DataController as data">
+
+    <section class="content row">
+
+      <section class="library col s12 m8">
+
+        <div class="library_tools row">
+          <div class="input-field col s12 m6">
+            <input id="search_book" type="search" ng-model="query">
+            <label for="search_book">Search</label>
+          </div>
+          <div class="input-field col s12 m3">
+            <select ng-model="orderProp" material-select>
+              <option ng-repeat="item in sortFilter" value="{{item.value}}">{{item.name}}</option>
+            </select>
+          </div>
+          <div class="input-field col s12 m3">
+            <select  ng-model="genre" material-select>
+              <option ng-repeat="filter in genreFilter" value="{{filter.value}}">{{filter.name}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="library_content row">
+          <div class="col s12 m6"  ng-repeat="book in books | filter:query | orderBy:orderProp | filter:genre " class="content_book-item" ng-click="data.infoBook(book)" ng-hide="data.isSelected(true)">
+            <div class="card book_card">
+              <div class="card-content">
+                <p class="card-title">{{book.name}}</p>
+                <h7 class="book_author">{{book.author}}</h7>
+                <p ng-class="data.ifReadBook(book)">
+                  <i class="material-icons">
+                    {{data.ifReadBook(book)}}
+                  </i>
+                </p>
+                <p class="rating_stars">
+                  <span class="star"  ng-repeat="value in data.arrayRatingStars(book)">
+                    <i class="material-icons">
+                      star
+                    </i>
+                  <span>
+                </p>
+              </div>
+              <div class="card-action">
+                <a ng-href="{{book.libraryUrl}}">Link to the book</a>
+              </div>
+            </div>
+          </div>
+          <form ng-show="data.isSelected(true)" name="formEditBook" class="card col s12 m6 offset-m3 editBook">
+            <header>
+              <h5>{{data.currentBook.name}}</h5>
+            </header>
+            <h6>{{data.currentBook.author}}</h6>
+            <p>Rating Stars: {{data.currentBook.rating_stars}}</p>
+            <div class="row">
+              <button class="waves-effect waves-light btn col s4 offset-s4" ng-click="data.selectTab(false)">
+              SAVE
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </section>
+      <section class="toReadList col s12 m4 card">
+        <header>
+          <h5>To do read book list</h5>
+        </header>
+        <div class="toReadList_tools">
+          <div class="toDo-panel" ng-controller="TodoListController as todoList">
+            <div class="mainPanel" ng-show="isSelected(false)">
+              <form name="formAddToDo" class="row add_new_todo" ng-submit="todoList.addTodo()">
+                <p ng-show="formAddToDO.$submitted || formAddToDo.nameToDo.$touched" class="warning_message_wrap col s12" novalidate>
+                  <span
+                  ng-show="formAddToDo.nameToDo.$error.required"
+                  class="warning-mesage">Tell us your to do name.</span>
+                  <span
+                  ng-show="formAddToDo.nameToDo.$error.text"
+                  class="warning-mesage">This is not a valid to do name.</span>
+                </p>
+                <div class="input-field col m8 s12">
+                  <input
+                  ng-model="todoList.todoText"
+                  type="text"
+                  name="nameToDo"
+                  class="validate"
+                  required>
+                  <label>Add new to do</label>
+                </div>
+                <button
+                class="btn waves-effect waves-light col m3 s12"
+                type="submit"
+                ng-disabled="formAddToDo.$invalid">ADD</button>
+              </form>
+              <div class="tools_panel row">
+                <button ng-click="todoList.setRead(all)" class="waves-effect waves-light btn col s12 m3">All</button>
+                <button ng-click="todoList.setRead(true)" class="waves-effect waves-light btn col s12 m4 ">Complete</button>
+                <button ng-click="todoList.setRead(false)" class="waves-effect waves-light btn col s12 m4 ">Unread</button>
+              </div>
+              <p class="archive_active">
+                <span>{{todoList.remaining()}} of {{todoList.todos.length}} remaining</span>
+              [ <a href="" ng-click="todoList.archive()" >archive</a> ]
+              </p>
+              <ul class="unstyled row">
+                <li ng-repeat="todo in todos | filter:todoList.read" class="col s12">
+                  <input
+                    type="checkbox"
+                    ng-model="todo.done">
+                    <label
+                    class="done-{{todo.done}} todo"
+                    ng-click="todoList.readBookDone(todo)"
+                    ng-mouseenter="todoList.selectTodoItem(todo.name)">{{todo.name}}</label>
+                  <button
+                    class="add-library btn"
+                    ng-click="todoList.todoInfo(todo)"
+                    ng-show="todoList.isSelectedTodoItem(todo.name) && (todo.save_library != 'save')">add library ?</button>
+                </li>
+              </ul>
+            </div>
+
+            <form name="formBook" class="activeBookForm row" ng-submit="update(currentTodoBook)" ng-show="isSelected(true)" ng-controller="formAddCntrl" novalidate>
+              <div input-field class="col s12">
+                <input
+                type="text"
+                ng-model="currentTodoBook.name"
+                name="name"
+                length="20"
+                required>
+                <label>Name book</label>
+              </div>
+              <p ng-show="formBook.$submitted || formBook.name.$touched" class="warning_message_wrap col s12">
+                <span
+                ng-show="formBook.name.$error.required"
+                lass="warning-mesage">Tell us your book name.</span>
+                <span
+                ng-show="formBook.name.$error.text"
+                class="warning-mesage">This is not a valid name.</span>
+              </p>
+              <div input-field class="col s12">
+                <input
+                type="text"
+                ng-model="currentTodoBook.author"
+                name="author"
+                length="20"
+                required>
+                <label>Author book</label>
+              </div>
+              <p ng-show="formBook.$submitted || formBook.author.$touched" class="warning_message_wrap col s12">
+                <span
+                ng-show="formBook.author.$error.required"
+                class="warning-mesage">Tell us your book author.</span>
+                <span
+                ng-show="formBook.author.$error.text"
+                class="warning-mesage">This is not a valid name author.</span>
+              </p>
+              <div input-field  class="col s12">
+                <input
+                type="number"
+                ng-model="currentTodoBook.rating_stars"
+                min="0"
+                max="10"
+                name="rating_stars"
+                required/>
+                <label>Rating stars</label>
+              </div>
+              <p ng-show="formBook.$submitted || formBook.rating_stars.$touched" class="warning_message_wrap col s12">
+                <span
+                ng-show="formBook.rating_stars.$error.required"
+                class="warning-mesage">Tell us your book rating stars.</span>
+                <span
+                ng-show="formBook.rating_stars.$error.text"
+                class="warning-mesage">This is not a valid rating stars.</span>
+              </p>
+              <div input-field class="col s12">
+                <input
+                type="url"
+                ng-model="currentTodoBook.libraryUrl"
+                name="libraryUrl"
+                required
+                length="30" >
+                <label>URL library book</label>
+              </div>
+              <p ng-show="formBook.$submitted || formBook.libraryUrl.$touched" class="warning_message_wrap col s12">
+                <span
+                ng-show="formBook.libraryUrl.$error.required"
+                class="warning-mesage">Tell us your library book url.</span>
+                <span
+                ng-show="formBook.libraryUrl.$error.text"
+                class="warning-mesage">This is not a valid library book url.</span>
+              </p>
+              <div class="panel-radio">
+                <p class="col s12 m4">
+                  <input
+                  name="genre"
+                  type="radio"
+                  id="novel"
+                  value="novel"
+                  ng-model="currentTodoBook.genre"
+                  required/>
+                  <label for="novel">novel</label>
+                </p>
+                <p class="col s12 m4">
+                  <input
+                  name="genre"
+                  type="radio"
+                  id="detective"
+                  value="detective"
+                  ng-model="currentTodoBook.genre"
+                  required/>
+                  <label for="detective">detective</label>
+                </p>
+                <p class="col s12 m4">
+                  <input
+                  name="genre"
+                  type="radio"
+                  id="horor"
+                  value="horor"
+                  ng-model="currentTodoBook.genre"
+                  required/>
+                  <label for="horor">horor</label>
+                </p>
+              </div>
+              <p ng-show="formBook.$submitted || formBook.genre.$touched" class="warning_message_wrap col s12 error_mesage">
+                <span
+                ng-show="formBook.genre.$error.required"
+                class="warning-mesage">Tell us your book genre.</span>
+              </p>
+              <div class="row">
+                <button
+                  class="btn waves-effect waves-light col s12 m4 offset-m4"
+                  id="save_book_library"
+                  type="submit"
+                  name="action"
+                  ng-disabled="formBook.$invalid">SAVE</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </section>
+  </section>
